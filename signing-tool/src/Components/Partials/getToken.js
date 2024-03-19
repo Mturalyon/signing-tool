@@ -1,4 +1,5 @@
 import { clientId, clientSecret, tokenUrl } from "./credentials";
+import startSession from "./Authentication/startSession";
 
 function getToken() {
     localStorage.clear();
@@ -25,8 +26,13 @@ fetch(`${tokenUrl}`, requestOptions)
   .then((response) => response.text())
   .then((result) => {
     const parsedObject = JSON.parse(result)
-    console.log(parsedObject.access_token)
-    localStorage.setItem("token", parsedObject.access_token);
+    if(parsedObject.access_token) {
+      localStorage.setItem("token", parsedObject.access_token);
+      startSession();
+    } else {
+      console.log("Error")
+    }
+    
 })
   
   .catch((error) => console.error(error));
